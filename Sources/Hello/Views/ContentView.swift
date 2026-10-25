@@ -8,12 +8,11 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            Header()
-
-            Conversation(chatService: viewService, isTextFieldFocused: isTextFieldFocused)
-
-            Spacer()
-
+            Conversation(chatService: viewService)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .safeAreaInset(edge: .bottom) {
             HStack {
                 TextField("Enter your message...", text: $inputText)
                     .padding()
@@ -36,8 +35,9 @@ struct ContentView: View {
                     inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                         || viewService.isLoading
                 )
-            }.glassEffect()
+            }
+            .glassEffect()
+            .padding(.horizontal)
         }
-        .padding().frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

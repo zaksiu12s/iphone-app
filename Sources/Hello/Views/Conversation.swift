@@ -2,7 +2,6 @@ import SwiftUI
 
 struct Conversation: View {
     @ObservedObject var chatService: ChatService
-    let isTextFieldFocused: Bool
 
     var body: some View {
         GeometryReader { geometry in
@@ -47,16 +46,6 @@ struct Conversation: View {
                 .onChange(of: chatService.isLoading) {
                     if chatService.isLoading {
                         scrollToLatest(using: proxy, id: "loading")
-                    }
-                }
-                .onChange(of: isTextFieldFocused) {
-                    guard isTextFieldFocused else {
-                        return
-                    }
-
-                    Task { @MainActor in
-                        await Task.yield()
-                        scrollToLatest(using: proxy)
                     }
                 }
             }
