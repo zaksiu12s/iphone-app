@@ -12,11 +12,18 @@ struct ContentView: View {
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .safeAreaInset(edge: .bottom) {
-            HStack {
+        .safeAreaInset(edge: .bottom, spacing: 8) {
+            ZStack(alignment: .trailing) {
                 TextField("Enter your message...", text: $inputText)
-                    .padding()
+                    .padding(.leading, 16)
+                    .padding(.trailing, 56)
+                    .frame(height: 52)
                     .focused($isTextFieldFocused)
+                    .contentShape(Capsule())
+                    .onTapGesture {
+                        isTextFieldFocused = true
+                    }
+                    .glassEffect(.regular, in: Capsule())
                 Button {
                     let prompt = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
                     guard !prompt.isEmpty, !viewService.isLoading else {
@@ -28,16 +35,22 @@ struct ContentView: View {
                         await viewService.sendMessage(prompt)
                     }
                 } label: {
-                    Text("Ask").bold()
+                    Image(systemName: "arrow.up")
+                        .font(.headline.weight(.bold))
+                        .foregroundStyle(.white)
+                        .frame(width: 40, height: 40)
                 }
-                .glassEffect(.regular.interactive())
+                .buttonStyle(.plain)
+                .background(.blue, in: Circle())
                 .disabled(
                     inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                         || viewService.isLoading
-                )
+                ).padding(.trailing, 8)
+                .frame(width: 40, height: 40)
             }
-            .glassEffect(.regular.interactive())
-            .padding(.horizontal)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 12)
+            .padding(.bottom, 8)
         }
     }
 }
