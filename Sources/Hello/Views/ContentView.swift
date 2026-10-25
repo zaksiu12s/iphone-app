@@ -16,24 +16,23 @@ struct ContentView: View {
                 TextField("Enter your message...", text: $inputText)
                     .padding()
                 Button {
-                    if inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    let prompt = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
+                    guard !prompt.isEmpty, !viewService.isLoading else {
                         return
                     }
 
                     Task {
-                        do {
-                            let prompt: String = inputText
-                            inputText = ""
-                            try await viewService.sendMessage(prompt)
-                        } catch {
-                            print("Error sending message: \(error)")
-                        }
+                        inputText = ""
+                        await viewService.sendMessage(prompt)
                     }
                 } label: {
                     Text("Ask").bold()
                 }
                 .glassEffect()
-                .disabled(inputText.isEmpty)
+                .disabled(
+                    inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                        || viewService.isLoading
+                )
             }.glassEffect()
         }
         .padding().frame(maxWidth: .infinity, maxHeight: .infinity)
