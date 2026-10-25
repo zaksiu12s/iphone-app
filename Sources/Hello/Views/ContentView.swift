@@ -3,18 +3,21 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var viewService: ChatService = ChatService()
     @State private var inputText = ""
+    @FocusState private var isTextFieldFocused: Bool
+    @State private var isSidebarOpen = false
 
     var body: some View {
         VStack {
             Header()
 
-            Conversation(chatService: viewService)
+            Conversation(chatService: viewService, isTextFieldFocused: isTextFieldFocused)
 
             Spacer()
 
             HStack {
                 TextField("Enter your message...", text: $inputText)
                     .padding()
+                    .focused($isTextFieldFocused)
                 Button {
                     let prompt = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
                     guard !prompt.isEmpty, !viewService.isLoading else {
