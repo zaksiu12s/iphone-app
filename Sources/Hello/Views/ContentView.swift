@@ -22,8 +22,9 @@ struct ContentView: View {
 
                     Task {
                         do {
+                            let prompt: String = inputText
                             inputText = ""
-                            try await viewService.sendMessage(inputText)
+                            try await viewService.sendMessage(prompt)
                         } catch {
                             print("Error sending message: \(error)")
                         }
