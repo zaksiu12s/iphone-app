@@ -30,13 +30,13 @@ struct ContentView: View {
                 } label: {
                     Text("Ask").bold()
                 }
-                .glassEffect()
+                .glassEffect(.regular.interactive())
                 .disabled(
                     inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                         || viewService.isLoading
                 )
             }
-            .glassEffect()
+            .glassEffect(.regular.interactive())
             .padding(.horizontal)
         }
     }
