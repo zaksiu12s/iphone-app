@@ -1,14 +1,14 @@
 import SwiftUI
 
 struct Conversation: View {
-    let messages: [ChatMessage]
+    @ObservedObject var chatService: ChatService
 
     var body: some View {
         GeometryReader {
             geometry in
             ScrollView {
-                LazyVStack {
-                    ForEach(messages) {
+                LazyVStack(alignment: .leading) {
+                    ForEach(chatService.messages) {
                         message in
                         HStack {
                             if message.isUser {
@@ -22,8 +22,21 @@ struct Conversation: View {
                             }
                         }
                     }
-                }.frame(width: geometry.size.width)
-            }.defaultScrollAnchor(.bottom)
+
+                    Spacer()
+
+                    if chatService.isLoading {
+                        HStack {
+                            ProgressView()
+                            Spacer()
+                        }
+                    }
+                .frame(
+                    width: geometry.size.width,
+                    minHeight: geometry.size.height,
+                    alignment: .top
+                )
+            }
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

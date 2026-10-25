@@ -1,14 +1,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var viewService = ChatService()
+    @StateObject private var viewService: ChatService = ChatService()
     @State private var inputText = ""
 
     var body: some View {
         VStack {
             Header()
 
-            Conversation(messages: viewService.messages)
+            Conversation(chatService: viewService)
 
             Spacer()
 
