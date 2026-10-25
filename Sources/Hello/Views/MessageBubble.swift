@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MessageBubble: View {
     let message: ChatMessage
+    let parentWidth: CGFloat
 
     var body: some View {
         Text(message.text)
@@ -12,5 +13,9 @@ struct MessageBubble: View {
                     : Color.gray.opacity(0.2)
             )
             .clipShape(RoundedRectangle(cornerRadius: 12))
+            .fixedSize(
+                horizontal: false, vertical: true
+            ).frame(maxWidth: parentWidth * 0.75, alignment: message.isUser ? .trailing : .leading)
+
     }
 }

@@ -1,28 +1,38 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var promptMessage: String = ""
-    @State private var messages: [ChatMessage] = [
-        ChatMessage(text: "Hello, how can I help you?", isUser: false)
-    ]
+    @StateObject private var viewService = ChatService()
+    @State private var inputText = ""
 
     var body: some View {
         VStack {
-            Text("AI Chat").padding().font(.largeTitle)
+            Header()
 
-            Conversation(messages: messages)
+            Conversation(messages: viewService.messages)
 
             Spacer()
 
             HStack {
-                TextField("Enter your message...", text: $promptMessage)
+                TextField("Enter your message...", text: $inputText)
                     .padding()
                 Button {
-                    messages.append(ChatMessage(text: promptMessage, isUser: true))
-                    promptMessage = ""
+                    if inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        return
+                    }
+
+                    Task {
+                        do {
+                            inputText = ""
+                            try await viewService.sendMessage(inputText)
+                        } catch {
+                            print("Error sending message: \(error)")
+                        }
+                    }
                 } label: {
                     Text("Ask").bold()
-                }.glassEffect()
+                }
+                .glassEffect()
+                .disabled(inputText.isEmpty)
             }.glassEffect()
         }
         .padding().frame(maxWidth: .infinity, maxHeight: .infinity)

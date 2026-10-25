@@ -4,17 +4,26 @@ struct Conversation: View {
     let messages: [ChatMessage]
 
     var body: some View {
-        ScrollView {
-            LazyVStack {
-                ForEach(messages, id: \.id) {
-                    message in
-                    HStack {
-                        message.isUser ? Spacer() : nil
-                        MessageBubble(message: message)
-                        message.isUser ? nil : Spacer()
+        GeometryReader {
+            geometry in
+            ScrollView {
+                LazyVStack {
+                    ForEach(messages) {
+                        message in
+                        HStack {
+                            if message.isUser {
+                                Spacer()
+                            }
+
+                            MessageBubble(message: message, parentWidth: geometry.size.width)
+
+                            if !message.isUser {
+                                Spacer()
+                            }
+                        }
                     }
-                }
-            }
-        }.defaultScrollAnchor(.bottom)
+                }.frame(width: geometry.size.width)
+            }.defaultScrollAnchor(.bottom)
+        }.frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
