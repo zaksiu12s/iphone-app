@@ -16,6 +16,7 @@ struct MessageBubble: View {
             .fixedSize(
                 horizontal: false, vertical: true
             ).frame(maxWidth: parentWidth * 0.75, alignment: message.isUser ? .trailing : .leading)
+            .selectionDisabled(false)
 
     }
 }
